@@ -1,0 +1,87 @@
+using OpenQA.Selenium;
+using OpenQA.Selenium.Chrome;
+using WebDriverManager;
+using WebDriverManager.DriverConfigs.Impl;
+using WebDriverManager.Helpers;
+
+namespace automation;
+
+[TestFixture]
+public class assert
+{
+    protected IWebDriver Driver;
+    [SetUp]
+    public void conf()
+    {
+        new DriverManager().SetUpDriver(new ChromeConfig(), VersionResolveStrategy.MatchingBrowser);
+        Driver = new ChromeDriver();
+        Driver.Navigate().GoToUrl("https://example.com");
+        Driver.Manage().Window.Maximize();
+    }
+
+    public class allAsserts
+    {
+        [Test]
+        public void AssPass()
+        {
+            Assert.Pass("Test pass");
+        }
+
+        [Test]
+        public void AssFail()
+        {      
+            Assert.Fail("Test fail");
+        }
+
+        [Test]
+        public void AssIsTrue()
+        {
+            bool asstru = 10 > 5;
+            Assert.IsTrue(asstru, "Expected output true");
+        }
+
+        [Test]
+        public void AssIsFalse()
+        {
+            bool assfal = false;
+            Assert.IsFalse(assfal, "Expected output false");
+        }
+
+        [Test]
+        public void AssAreNotEqual()
+        {
+            int actual = 10;
+            int notexp = 5;
+            Assert.AreNotEqual(notexp, actual, "Values should not match");
+        }
+
+        [Test]
+        public void AssAreEqual()
+        {
+            int exp = 15;
+            int actual = 10 + 5;
+            Assert.AreEqual(exp, actual, "Values do not match");
+        }
+
+        [Test]
+        public void AssIsNull()
+        {
+            string var = null;
+            Assert.IsNull(var, "Expected value null");
+        }
+
+        [Test]
+        public void AssIsnotNull()
+        {
+            string call = "Notnull";
+            Assert.IsNotNull(call, "Expected value null");
+        }
+    }
+
+    [TearDown]
+    public void Cnup()
+    {
+        Driver.Quit();
+        Driver.Dispose();
+    }
+}
