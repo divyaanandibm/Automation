@@ -1,0 +1,145 @@
+using NUnit.Framework.Constraints;
+using OpenQA.Selenium;
+using OpenQA.Selenium.Chrome;
+using WebDriverManager;
+using WebDriverManager.DriverConfigs.Impl;
+using WebDriverManager.Helpers;
+
+namespace automation;
+
+[TestFixture]
+public class assert
+{
+    protected IWebDriver Driver;
+    [SetUp]
+    public void conf()
+    {
+        new DriverManager().SetUpDriver(new ChromeConfig(), VersionResolveStrategy.MatchingBrowser);
+        Driver = new ChromeDriver();
+        Driver.Navigate().GoToUrl("https://example.com");
+        Driver.Manage().Window.Maximize();
+    }
+
+    public class allAsserts
+    {
+        
+        [Test]
+        public void thatistrue()
+        {
+            bool expvalue = true;
+            Assert.That(expvalue, Is.True, "True");
+        }
+
+        [Test]
+        public void thatisfalse()
+        {
+            bool expvalue1 = false;
+            Assert.That(expvalue1, Is.False, "False");
+        }
+
+        [Test]
+        public void thatalltrue()
+        {
+            var bools = new List<bool> { true, true, true };
+            Assert.That(bools, Is.All.True);
+        }
+
+        [Test]
+        public void thatallfalse()
+        {
+            var bools = new List<bool> { false, false };
+            Assert.That(bools, Is.All.False);
+        }
+
+        [Test]
+        public void thathassometrue()
+        {
+            var trndfa = new[] { false, true, false };
+            Assert.That(trndfa, Has.Some.True, "true");
+        }
+
+        [Test]
+        public void thathassomefalse()
+        {
+            var tandf = new[] { true, false, true };
+            Assert.That(tandf, Has.Some.False, "true");
+        }
+
+        [Test]
+        public void thatisequalto()
+        {
+            int num = 5;
+            Assert.That(num, Is.EqualTo(5));
+        }
+
+        [Test]
+        public void thatisnotequalto()
+        {
+            int num1 = 5;
+            Assert.That(num1, Is.Not.EqualTo(10));
+        }
+
+        [Test]
+        public void thatisnull()
+        {
+            object thatisnull = null;
+            Assert.That(thatisnull, Is.Null);
+        }
+
+        [Test]
+        public void thatisnotnull()
+        {
+            object thatisnotnull = new object();
+            Assert.That(thatisnotnull, Is.Not.Null);
+        }
+
+        [Test]
+        public void thatdoescontain()
+        {
+            var list = new List<string> { "anand", "vignesh", "suriya" };
+            Assert.That(list, Does.Contain("vignesh"));
+        }
+
+        [Test]
+        public void thatdoesnotcontain()
+        {
+            var list = new List<string> { "anand", "vignesh", "suriya" };
+            Assert.That(list, Does.Not.Contain("kiran"));
+        }
+
+        [Test]
+        public void thatcontainitem()
+        {
+            var num2 = new List<int> { 1, 2, 3, 4 };
+            Assert.That(num2, Contains.Item(1));
+        }
+
+        [Test]
+        public void thateqaulto()
+        {
+            int a = 10;
+            int b = 12;
+            int c = a + b;
+            Assert.That(c, Is.EqualTo(22));
+        }
+
+        [Test]
+        public void thatequivalentto()
+        {
+            var list = new List<string> { "SQA-iO", "SQA-iOw", "Vision" };
+            var list1 = new List<string> { "Vision","SQA-iO","SQA-iOw", };
+            Assert.That(list, Is.EquivalentTo(list1));
+        }
+
+                        
+    }
+
+
+    [TearDown]
+    public void Cnup()
+    {
+        Driver.Quit();
+        Driver.Dispose();
+    }
+}
+
