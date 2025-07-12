@@ -1,0 +1,95 @@
+using System.Collections;
+using NUnit.Framework;
+using OpenQA.Selenium;
+using OpenQA.Selenium.Chrome;
+using WebDriverManager;
+using WebDriverManager.DriverConfigs.Impl;
+using WebDriverManager.Helpers;
+
+namespace automation;
+
+[TestFixture]
+public class AssertTests
+{
+    protected IWebDriver Driver;
+
+    [SetUp]
+
+    public void Setup()
+    {
+        new DriverManager().SetUpDriver(new ChromeConfig(), VersionResolveStrategy.MatchingBrowser);
+        Driver = new ChromeDriver();
+        Driver.Navigate().GoToUrl("https://example.com");
+        Driver.Manage().Window.Maximize();
+    }
+
+    
+    public enum TestType
+    {
+        Fresh,
+        Washed,
+        PostVas,
+        SwimUp,
+        Gradient
+    }
+
+    public enum CapillaryType
+    {
+        High,
+        Medium,
+        Low,
+        custom
+    }
+
+    public enum WHOCriteria
+    {
+        WHO3,
+        WHO4,
+        WHO5,
+        WHO6
+    }
+    class Testcasesource
+    {
+
+        public static IEnumerable<TestCaseData> AllData =>
+
+            from object Who in Enum.GetValues(typeof(WHOCriteria))
+            where Who is WHOCriteria.WHO6
+            from object Test in Enum.GetValues(typeof(TestType))
+            where Test is TestType.Fresh
+            from object capillary in Enum.GetValues(typeof(CapillaryType))
+            where capillary is CapillaryType.High
+            select new TestCaseData(Test, Who, capillary);
+            
+
+    }
+    public class finalout()
+    {
+
+        [TestCaseSource(typeof(Testcasesource), nameof(Testcasesource.AllData))]
+        public void Whocaptety(TestType testType, WHOCriteria who, CapillaryType capillaryType)
+        {
+            if (who == WHOCriteria.WHO4 && testType == TestType.Gradient && capillaryType == CapillaryType.Low)
+            {
+                Console.WriteLine("WHO4 criteria, Gradient and Low level test is performed");
+            }
+            else if (who == WHOCriteria.WHO6 && testType == TestType.Fresh && capillaryType == CapillaryType.High)
+            {
+                Console.WriteLine("WHO6 criteria, Fresh and High level test is performed");
+            }
+            else
+            {
+                Console.WriteLine("All test is performed");
+            }
+
+        }
+
+    }
+
+    [TearDown]
+    public void Cleanup()
+    {
+        Driver.Quit();
+        Driver.Dispose();
+    }
+}
